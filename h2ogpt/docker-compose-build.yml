@@ -1,0 +1,30 @@
+version: '3.8'
+services:
+  h2ogpt_rocmyai561:
+    image: devloic/h2ogpt_rocmyai-5.6.1
+    container_name: h2ogpt_rocmyai561
+    build:
+      context: .
+      dockerfile: ../Dockerfile
+      target: h2ogpt_rocmyai-5.6.1
+    volumes:
+       - ~/.cache:/home/ai/.cache
+       - /mnt/ext4ssd/huggingface_cache:/home/ai/.cache/huggingface
+       # - h2o-cache:/home/ai/.cache
+       - h2o-save:/home/ai/save
+    command: bash
+    ports:
+      - 7860
+    group_add:
+      - $RENDER_ID
+    devices:
+      - "/dev/kfd"
+      - "/dev/dri"
+    stdin_open: true
+    tty: true
+    security_opt:
+      - seccomp:unconfined
+
+volumes:
+   h2o-cache:
+   h2o-save:
